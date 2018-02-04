@@ -1,0 +1,54 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <div class="corset">
+        <div class="site-title">
+            <a href="/">
+                Odango.moe - Transmission
+            </a>
+        </div>
+
+        <div class="search">
+            <input type="text" placeholder="Anime title...">
+        </div>
+
+        <div class="anime-info">
+            <h2>{{ anime.title }}</h2>
+            <span>{{ anime.alternatives|join(', ') }}</span>
+        </div>
+
+        {% for key, group_sets in sets %}
+            <div class="group-block">
+                <h4>{{ key ?: 'Unkown' }}</h4>
+
+                {% for set in group_sets %}
+                    <div class="set">
+                        <div class="set-title">
+                            <h5>{{ set.metadata.type }}{{ set.metadata.resolution ? (' / ' ~ set.metadata.resolution) }}</h5>
+                            <button
+                                    class="subscribe {% if collections[set.hash] %}subscribed{% endif %}"
+                                    data-id="{{ anime.id }}"
+                                    data-hash="{{ set.hash }}"
+                                    data-subscription-id="{{ collections[set.hash].id }}"
+                            >
+                                {% if collections[set.hash] %}
+                                    Unsubscribe
+                                {% else %}
+                                    Subscribe
+                                {% endif %}
+                            </button>
+                        </div>
+
+                        <div class="torrents">
+                            {% for torrent in set.torrents %}
+                                <div class="torrent">
+                                    <div class="torrent-title">{{ torrent.title }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

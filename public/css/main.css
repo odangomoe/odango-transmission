@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300');
+
+html, body {
+    height: 100%;
+    margin: 0;
+    background: #F1A9A0;
+    color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.body {
+    height: 100%;
+}
+
+.corset {
+    margin-left: auto;
+    margin-right: auto;
+
+    max-width: 940px;
+}
+
+.site-title > a, .site-title {
+    text-align: center;
+    font-size: 40px;
+    padding: 20px;
+    text-decoration: none;
+    color: white;
+}
+
+.collection {
+    background: #E08283;
+    margin: 15px;
+    padding: 15px;
+}
+
+.collection-title {
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+.torrent-set {
+    margin-top: 15px;
+}
+
+.saved-torrent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.progress > .bar,
+.progress > .text-overlay {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+.progress > .bar {
+    background: #D24D57;
+}
+
+.progress > .text-overlay {
+    text-align: center;
+    width: 100%;
+    padding: 4px;
+}
+
+.status > * {
+    margin: 0 5px;
+}
+
+
+.progress {
+    position: relative;
+    height: 30px;
+    width: 100px;
+    margin: -5px;
+    margin-left: 5px;
+}
+
+
+.status {
+    background: #E26A6A;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search {
+    margin-top: 5px;
+}
+
+.search input {
+    margin: auto;
+    display: block;
+    height: 30px;
+    width: 400px;
+    border: 0;
+    padding: 5px;
+    font-size: 1.02em;
+    font-weight: 300;
+}
+
+.autocomplete-suggestions {
+    border: none;
+}
+
+.autocomplete-suggestion {
+    padding: 0 5px;
+}
+
+.autocomplete-suggestion b {
+    color: #D24D57;
+}
+
+.torrent > div {
+    padding: 0 5px;
+}
+.torrents::after {
+    clear: both;
+    display: table;
+    content: "";
+}
+
+.torrents {
+    margin-bottom: 15px;
+}
+
+.torrent {
+    display: flex;
+}
+
+.torrent-title {
+    flex-grow: 1;
+}
+
+.torrent a {
+    color: #D24D57;
+    text-decoration: none;
+}
+
+
+.subscribe {
+    background: #947CB0;
+    border: none;
+    padding: 5px;
+    color: white;
+}
+.set-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.group-block {
+    background: #D24D57;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+h4, h5, h2 {
+    margin: 0;
+}
+
+.set + .set {
+    border-top: 1px solid white;
+}
+
+.anime-info {
+    margin-bottom: 20px;
+    background: #947CB0;
+    padding: 15px;
+    margin-top: 15px;
+}

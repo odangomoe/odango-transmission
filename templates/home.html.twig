@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% macro speed(amount) -%}
+    {%- if amount < 1000 -%}
+        {{ amount }} b/s
+    {%- elseif amount < 1000000 -%}
+        {{ (amount / 1000)|round(2, 'floor') }} kb/s
+    {%- elseif amount < 1000000000 -%}
+        {{ (amount / 1000000)|round(2, 'floor') }} mb/s
+    {%- else -%}
+        {{ (amount / 1000000000)|round(2, 'floor') }} gb/s
+    {%- endif -%}
+{%- endmacro %}
+
+{% import _self as macros %}
+
+{% block content %}
+    <div class="corset">
+        <div class="site-title">
+            <a href="/">
+                Odango.moe - Transmission
+            </a>
+        </div>
+
+        <div class="search">
+            <input type="text" placeholder="Anime title...">
+        </div>
+
+        {% for collection in collections %}
+            <div class="collection">
+                <div class="collection-title">{{ collection.getFriendlyName() }}</div>
+
+                <div class="torrent-set">
+                    {% for torrent in collection.getTorrents() %}
+                        <div class="saved-torrent">
+                            {% set info = torrent.getInfo() %}
+                            <div class="torrent-title">
+                                {{ torrent.getName() }}
+                            </div>
+
+                            <div class="status">
+                                {% if info %}
+                                    {% if info.getPercentDone() == 100 %}
+                                        <div class="upload">{{ macros.speed(info.getUploadRate()) }}</div>
+                                        <div class="ratio">{{ info.getUploadRatio() }}</div>
+                                    {% else %}
+                                        <div class="download">{{ macros.speed(info.getDownloadRate()) }}</div>
+                                    {% endif %}
+                                    <div class="progress">
+                                        <div class="bar" style="width: {{ info.getPercentDone() }}%"></div>
+                                        <div class="text-overlay">
+                                            {{ info.getPercentDone() }}%
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    Queued
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
