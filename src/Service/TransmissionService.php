@@ -35,9 +35,12 @@ class TransmissionService
 
         /** @var Torrent $torrent */
         foreach ($torrents as $torrent) {
-            $transmissionTorrent = $this->transmission->add($torrent->getTorrentPath(), false, $torrent->getDownloadPath());
-            $torrent->setTransmissionId($transmissionTorrent->getId());
-            $this->em->persist($torrent);
+            try {
+                $transmissionTorrent = $this->transmission->add($torrent->getTorrentPath(), false, $torrent->getDownloadPath());
+                $torrent->setTransmissionId($transmissionTorrent->getId());
+                $this->em->persist($torrent);
+            } catch (\Exception $e) {
+            }
         }
 
         $this->em->flush();
