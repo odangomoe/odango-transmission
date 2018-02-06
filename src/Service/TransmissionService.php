@@ -54,8 +54,6 @@ class TransmissionService
                 continue;
             }
 
-            var_dump($transmissionTorrent->getPercentDone());
-
             $torrent->setInfo($transmissionTorrent);
             $this->em->persist($torrent);
         }
