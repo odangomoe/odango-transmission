@@ -1,10 +1,16 @@
 {
     "require": {
-        "bitcommunism/marx": "^1.0",
-        "bitcommunism/http": "^1.0",
-        "bitcommunism/twig": "^1.0",
-        "bitcommunism/doctrine": "^1.0",
-        "kslr/transmission-php": "^1.1"
+        "slim/slim": "4.5.0",
+        "kslr/transmission-php": "^1.1",
+        "ext-json": "*",
+        "guzzlehttp/psr7": "^1.6",
+        "php-http/message": "^1.8",
+        "php-http/guzzle6-adapter": "^2.0",
+        "lstrojny/fxmlrpc": "^0.15.0",
+        "php-di/php-di": "^6.1",
+        "doctrine/orm": "^2.7",
+        "twig/twig": "^3.0",
+        "slim/psr7": "^1.1"
     },
     "autoload": {
         "psr-4": {

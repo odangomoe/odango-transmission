@@ -28,7 +28,13 @@
 
         {% for collection in collections %}
             <div class="collection">
-                <div class="collection-title">{{ collection.getFriendlyName() }}</div>
+                <div class="collection-title">
+                    <h4>{{ collection.getFriendlyName() }}</h4>
+
+                    <button class="subscribe subscribed" data-subscription-id="{{ collection.id }}">
+                        Unsubscribe
+                    </button>
+                </div>
 
                 <div class="torrent-set">
                     {% for torrent in collection.getTorrents() %}

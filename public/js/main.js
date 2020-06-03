@@ -27,6 +27,9 @@ window.addEventListener('DOMContentLoaded', () => {
         if (!result) {
           return;
         }
+
+        if (button.parentElement.classList.contains("collection-title"))
+
         button.classList.remove('subscribed');
         button.textContent = 'Subscribe';
         return;

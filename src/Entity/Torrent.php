@@ -38,6 +38,11 @@ class Torrent
     /**
      * @ORM\Column(type="string")
      */
+    private $downloadName;
+
+    /**
+     * @ORM\Column(type="string")
+     */
     private $torrentPath;
 
     /**
@@ -184,5 +189,21 @@ class Torrent
     public function setInfo($info): void
     {
         $this->info = serialize($info);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDownloadName()
+    {
+        return $this->downloadName;
+    }
+
+    /**
+     * @param   mixed  $downloadName
+     */
+    public function setDownloadName($downloadName): void
+    {
+        $this->downloadName = $downloadName;
     }
 }

@@ -1,6 +1,32 @@
 #!/usr/bin/env php
 <?php
 
-include_once __DIR__ . '/../vendor/autoload.php';
+use Odango\Transmission\Container;
+use Odango\Transmission\Service\OdangoService;
+use Odango\Transmission\Service\RTorrentService;
+use Odango\Transmission\Service\TransmissionService;
 
-\BitCommunism\Marx\Instance::create(__DIR__ . '/..')->odango(...$argv);
+include_once __DIR__.'/../vendor/autoload.php';
+
+$container = Container::get();
+
+$first = $argv[1] ?? 'none';
+echo "Executing: {$first}\n";
+
+if ($first === 'update') {
+    $container->get(OdangoService::class)->updateCollections();
+
+    return;
+}
+
+if ($first === "update-rtorrent") {
+    $container->get(RTorrentService::class)->updateTorrents();
+
+    return;
+}
+
+if ($first === 'update-transmission') {
+    $container->get(TransmissionService::class)->updateTorrents();
+
+    return;
+}

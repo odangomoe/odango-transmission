@@ -4,9 +4,8 @@
 namespace Odango\Transmission\Service;
 
 
-use BitCommunism\Doctrine\EntityManager;
 use DI\Container;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityManager;
 use Odango\Transmission\Entity\Collection;
 use Odango\Transmission\Entity\Torrent;
 
@@ -18,16 +17,16 @@ class OdangoService
     public function __construct(EntityManager $em, Container $container)
     {
         $this->em = $em;
-        $this->downloadPath = $container->get('transmission.download-path');
+        $this->downloadPath = $container->get('torrent.download-path');
     }
 
     public function getLatestCollections()
     {
         $collectionName = Collection::class;
 
-        $em = $this->em->getResponsibleEntityManager('default');
-
-        $query = $em->createQuery("SELECT DISTINCT collection FROM {$collectionName} collection JOIN collection.torrents torrent ORDER BY torrent.created DESC");
+        $query = $this->em->createQuery(
+            "SELECT DISTINCT collection FROM {$collectionName} collection JOIN collection.torrents torrent ORDER BY torrent.created DESC"
+        );
         $query->setMaxResults(20);
 
         return $query->getResult();
@@ -49,10 +48,9 @@ class OdangoService
 
     public function unsubscribeCollection($collectionId)
     {
-
         $collection = $this->em->find(Collection::class, $collectionId);
 
-        if (!$collection) {
+        if ( ! $collection) {
             return;
         }
 
@@ -62,7 +60,6 @@ class OdangoService
 
     public function updateCollections()
     {
-
         /** @var ObjectRepository $repo */
         $repo = $this->em->getRepository(Collection::class);
 
@@ -75,7 +72,10 @@ class OdangoService
 
     public function updateCollection(Collection $collection)
     {
-        $data = json_decode(file_get_contents('https://odango.moe/api/torrent/by-anime/' . $collection->getAnimeId()), true);
+        $data = json_decode(
+            file_get_contents('https://odango.moe/api/torrent/by-anime/'.$collection->getAnimeId()),
+            true
+        );
 
         foreach ($data['torrent-sets'] as $torrentSet) {
             if ($torrentSet['hash'] !== $collection->getAnimeHash()) {
@@ -109,9 +109,12 @@ class OdangoService
             $torrentEntity->setTorrentPath($torrent['nyaa']['torrent']);
 
             $downloadPath = $this->downloadPath;
+            $torrentEntity->setDownloadName(
+                $torrent['metadata']['name'].' - '.($torrent['metadata']['group'] ?? 'unknown')
+            );
 
-            if ($torrent['metadata']['type'] === 'ep' || count($torrents) > 0) {
-                $downloadPath .= '/' . $torrent['metadata']['name'] . ' - ' . ($torrent['metadata']['group'] ?? 'unknown');
+            if ($torrent['metadata']['type'] === 'ep' || count($torrents) > 1) {
+                $downloadPath .= '/'.$torrentEntity->getDownloadName();
             }
 
             $torrentEntity->setDownloadPath($downloadPath);
@@ -126,6 +129,7 @@ class OdangoService
 
     /**
      * @param $animeId
+     *
      * @return Collection[]
      */
     public function getByAnimeId($animeId)

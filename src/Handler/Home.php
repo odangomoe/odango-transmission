@@ -3,48 +3,89 @@
 
 namespace Odango\Transmission\Handler;
 
-
-use BitCommunism\Twig\Handler\Twig;
 use Odango\Transmission\Service\OdangoService;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Twig\Environment;
 
-class Home extends Twig
+use function GuzzleHttp\Psr7\stream_for;
+
+class Home
 {
-    public function home(RequestInterface $request, ResponseInterface $response, OdangoService $odangoService) {
-        $collections = $odangoService->getLatestCollections();
+    /**
+     * @var OdangoService
+     */
+    private $odangoService;
 
-        return $this->template('home.html.twig', [
-            'collections' => $collections,
-        ]);
+    /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * Home constructor.
+     *
+     * @param   OdangoService  $odangoService
+     * @param   Environment    $twig
+     */
+    public function __construct(OdangoService $odangoService, Environment $twig)
+    {
+        $this->odangoService = $odangoService;
+        $this->twig          = $twig;
     }
 
-    public function torrent($vars, RequestInterface $request, ResponseInterface $response, OdangoService $odangoService) {
-        $data = json_decode(file_get_contents('https://odango.moe/api/torrent/by-anime/' . $vars['id']), true);
+    public function home(RequestInterface $request, ResponseInterface $response)
+    {
+        $collections = $this->odangoService->getLatestCollections();
+
+        return
+            $response->withBody(
+                stream_for(
+                    $this->twig->render(
+                        'home.html.twig',
+                        [
+                            'collections' => $collections,
+                        ]
+                    )
+                )
+            );
+    }
+
+    public function torrent(RequestInterface $request, ResponseInterface $response, $vars)
+    {
+        $data = json_decode(file_get_contents('https://odango.moe/api/torrent/by-anime/'.$vars['id']), true);
 
         $byGroup = [];
 
         foreach ($data['torrent-sets'] as $torrentSet) {
-            $group = $torrentSet['metadata']['group'] ?? 'unkown';
+            $group = $torrentSet['metadata']['group'] ?? 'unknown';
 
-            if (!isset($byGroup[$group])) {
+            if ( ! isset($byGroup[$group])) {
                 $byGroup[$group] = [];
             }
 
             $byGroup[$group][] = $torrentSet;
         }
 
-        $collections = $odangoService->getByAnimeId($vars['id']);
+        $collections      = $this->odangoService->getByAnimeId($vars['id']);
         $collectionByHash = [];
 
         foreach ($collections as $collection) {
             $collectionByHash[$collection->getAnimeHash()] = $collection;
         }
 
-        return $this->template('torrents.html.twig', [
-            'sets' => $byGroup,
-            'anime' => $data['anime'],
-            'collections' =>  $collectionByHash,
-        ]);
+        return
+            $response->withBody(
+                stream_for(
+                    $this->twig->render(
+                        'torrents.html.twig',
+                        [
+                            'sets'        => $byGroup,
+                            'anime'       => $data['anime'],
+                            'collections' => $collectionByHash,
+                        ]
+                    )
+                )
+            );
     }
 }
