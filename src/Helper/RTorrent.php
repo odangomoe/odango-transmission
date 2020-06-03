@@ -61,7 +61,7 @@ class RTorrent
         $known    = [];
         foreach ($torrents as $torrent) {
             $known[] = new KnownTorrent(
-                $torrent[0], $torrent[1], $torrent[2], $torrent[3], $torrent[4], $torrent[5], $torrent[6]
+                $torrent[0], $torrent[1], $torrent[2] / 1000, $torrent[3], $torrent[4], $torrent[5], $torrent[6]
             );
         }
 
