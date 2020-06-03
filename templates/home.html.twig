@@ -48,7 +48,7 @@
                                 {% if info %}
                                     {% if info.getPercentDone() == 100 %}
                                         <div class="upload">{{ macros.speed(info.getUploadRate()) }}</div>
-                                        <div class="ratio">{{ info.getUploadRatio() }}</div>
+                                        <div class="ratio">{{ info.getRatio() }}</div>
                                     {% else %}
                                         <div class="download">{{ macros.speed(info.getDownloadRate()) }}</div>
                                     {% endif %}
